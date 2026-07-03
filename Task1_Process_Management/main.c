@@ -1,26 +1,39 @@
 #include <stdio.h>
 #include <pthread.h>
 
+int balance = 1000;
+
 void *depositThread(void * arg)
 {
-    printf("Thread 1 : Deposit operation started.\n"); 
+    for(int i = 0; i < 5; i++){
+        balance == 100;
+        printf("Deposit Thread: Balance = %d\n", balance); 
+    }
     return NULL;
 }
+
 
 void *withdrawThread(void *arg){
-    printf("Thread 2 : Withdraw operation started.\n"); 
+    for(int i = 0; i < 5; i++){
+        balance -= 50;
+
+        printf("Withdraw Thread: Balance = %d\n", balance); 
+    }
     return NULL;
 }
 
-void *balanceThread(void *arg){ 
-    printf("Thread 3 : Checking account balance.\n") ;
-    return NULL;
+void *balanceThread(void *arg){
+    for(int i = 0; i < 5; i++){
+ 
+        printf("Balance Thread: Current Balance = %d\n", balance) ;
+    }
+     return NULL;
 }
 
 int main(){
     pthread_t t1, t2, t3;
     
-    printf("Creating threads...\n\n");
+    printf("Initial Balance = %d\n\n", balance);
     
     pthread_create(&t1, NULL, depositThread, NULL);
     pthread_create(&t2, NULL, depositThread, NULL);
@@ -30,7 +43,7 @@ int main(){
     pthread_join(t2, NULL);
     pthread_join(t3, NULL);
 
-    printf("\n All threads have  finished execution. \n");
+    printf("\n Final Balance = %d\n", balance);
 
     return 0;
 }
