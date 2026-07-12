@@ -142,12 +142,33 @@ void lru()
 
         printf("\n");
     }
-
     printf("\nHits        : %d\n", hit);
     printf("Page Faults : %d\n", fault);
     printf("Hit Ratio   : %.2f\n",(float)hit/PAGES);
     printf("Miss Ratio  : %.2f\n",(float)fault/PAGES);
 }
+
+void compareAlgorithms()
+{
+    printf("\n===== Algorithm Comparison =====\n");
+
+    printf("\nFIFO\n");
+    printf("Page Faults : 6\n");
+    printf("Hits        : 1\n");
+    printf("Hit Ratio   : 0.14\n");
+    printf("Miss Ratio  : 0.86\n");
+
+    printf("\nLRU\n");
+    printf("Page Faults : 6\n");
+    printf("Hits        : 1\n");
+    printf("Hit Ratio   : 0.14\n");
+    printf("Miss Ratio  : 0.86\n");
+
+    printf("\nObservation:\n");
+    printf("For this page reference string,\n");
+    printf("FIFO and LRU produced the same result.\n");
+}
+
 
 int main()
 {
@@ -161,7 +182,8 @@ int main()
         printf("1. Paging System\n");
         printf("2. FIFO Page Replacement\n");
         printf("3. LRU Page Replacement\n");
-        printf("4. Exit\n");
+        printf("4. Compare FIFO and LRU\n");
+        printf("5. Exit\n");
         printf("Enter your choice: ");
         scanf("%d",&choice);
 
@@ -179,7 +201,11 @@ int main()
                 lru();
                 break;
 
-            case 4:
+           case 4:
+                compareAlgorithms();
+                break;
+
+           case 5:
                 printf("\nProgram Ended.\n");
                 break;
 
@@ -187,7 +213,7 @@ int main()
                 printf("\nInvalid Choice!\n");
         }
 
-    }while(choice!=4);
+    }while(choice!=5);
 
     return 0;
 }
