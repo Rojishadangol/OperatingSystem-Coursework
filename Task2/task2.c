@@ -11,18 +11,26 @@ int pages[PAGES] = {1,2,3,2,4,1,5};
 
 void paging()
 {
-    int pageSize = 256;
-    int logicalAddress = 1000;
+    int pageSize;
+    int logicalAddress;
+
+    printf("\n===== Paging System =====\n");
+
+    printf("Enter Page Size: ");
+    scanf("%d", &pageSize);
+
+    printf("Enter Logical Address: ");
+    scanf("%d", &logicalAddress);
 
     int pageNumber = logicalAddress / pageSize;
     int offset = logicalAddress % pageSize;
 
-    printf("\n===== Paging System =====\n");
-
-    printf("Page Size      : %d\n", pageSize);
-    printf("Logical Address: %d\n", logicalAddress);
-    printf("Page Number    : %d\n", pageNumber);
-    printf("Offset         : %d\n", offset);
+    printf("\nAddress Translation\n");
+    printf("----------------------------\n");
+    printf("Page Size        : %d\n", pageSize);
+    printf("Logical Address  : %d\n", logicalAddress);
+    printf("Page Number      : %d\n", pageNumber);
+    printf("Offset           : %d\n", offset);
 }
 
 void fifo()
@@ -61,7 +69,8 @@ void fifo()
             pointer = (pointer + 1) % FRAMES;
         }
 
-        printf("Page %d -> ", pages[i]);
+        printf("\nRequest Page %d\n", pages[i]);
+        printf("Frames : ");
 
         for(int j=0;j<FRAMES;j++)
         {
@@ -130,7 +139,8 @@ void lru()
             recent[replace] = i;
         }
 
-        printf("Page %d -> ", pages[i]);
+        printf("\nRequest Page %d\n", pages[i]);
+        printf("Frames : ");
 
         for(int j=0;j<FRAMES;j++)
         {
