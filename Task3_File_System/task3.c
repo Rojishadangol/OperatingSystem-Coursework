@@ -5,7 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h>
 void createFile()
 {
     FILE *fp = fopen("sample.txt", "w");
@@ -69,10 +69,36 @@ void deleteFile()
         printf("Unable to delete file.\n");
 }
 
+int login()
+{
+    char username[20];
+    char password[20];
+
+    printf("Username: ");
+    scanf("%s",username);
+
+    printf("Password: ");
+    scanf("%s",password);
+
+    if(strcmp(username,"admin")==0 &&
+       strcmp(password,"1234")==0)
+    {
+        printf("\nLogin Successful.\n");
+        return 1;
+    }
+
+    printf("\nInvalid Username or Password.\n");
+
+    return 0;
+}
+
 int main()
 {
+    if(!login())
+    {
+        return 0;
+    }
     int choice;
-
     do
     {
         printf("\n===== File System =====\n");
