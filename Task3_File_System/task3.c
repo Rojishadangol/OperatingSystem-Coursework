@@ -1,11 +1,10 @@
-/*
-    Task 3 - Day 14
-    Basic File Operations
-*/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+char permission[4] = "rw-";
+
 void createFile()
 {
     FILE *fp = fopen("sample.txt", "w");
@@ -92,6 +91,47 @@ int login()
     return 0;
 }
 
+void showPermission()
+{
+    printf("\nCurrent File Permission: %s\n", permission);
+}
+
+
+void changePermission()
+{
+    printf("\nEnter new permission (example rwx, rw-, r--): ");
+    scanf("%s", permission);
+
+    printf("Permission changed successfully.\n");
+}
+
+
+void checkReadPermission()
+{
+    if(permission[0]=='r')
+        printf("Read Permission Granted.\n");
+    else
+        printf("Read Permission Denied.\n");
+}
+
+
+void checkWritePermission()
+{
+    if(permission[1]=='w')
+        printf("Write Permission Granted.\n");
+    else
+        printf("Write Permission Denied.\n");
+}
+
+
+void checkExecutePermission()
+{
+    if(permission[2]=='x')
+        printf("Execute Permission Granted.\n");
+    else
+        printf("Execute Permission Denied.\n");
+}
+
 int main()
 {
     if(!login())
@@ -106,7 +146,12 @@ int main()
         printf("2. Write File\n");
         printf("3. Read File\n");
         printf("4. Delete File\n");
-        printf("5. Exit\n");
+        printf("5. Show File Permission\n");
+        printf("6. Change File Permission\n");
+        printf("7. Check Read Permission\n");
+        printf("8. Check Write Permission\n");
+        printf("9. Check Execute Permission\n");
+        printf("10. Exit\n");
 
         printf("Enter Choice: ");
         scanf("%d",&choice);
@@ -129,15 +174,34 @@ int main()
                 deleteFile();
                 break;
 
-            case 5:
-                printf("Program Ended.\n");
+             case 5:
+                showPermission();
                 break;
 
+
+            case 6:
+                changePermission();
+                break;
+
+
+            case 7:
+                checkReadPermission();
+                break;
+
+
+            case 8:
+                checkWritePermission();
+                break;
+
+
+            case 9:
+                checkExecutePermission();
+                break;
             default:
                 printf("Invalid Choice.\n");
         }
 
-    }while(choice!=5);
+    }while(choice!=10);
 
     return 0;
 }
