@@ -132,6 +132,54 @@ void checkExecutePermission()
         printf("Execute Permission Denied.\n");
 }
 
+void encryptFile()
+{
+    FILE *fp = fopen("sample.txt", "r");
+    FILE *temp = fopen("encrypted.txt", "w");
+
+    char ch;
+
+    if(fp == NULL)
+    {
+        printf("File not found.\n");
+        return;
+    }
+
+    while((ch = fgetc(fp)) != EOF)
+    {
+        fputc(ch + 3, temp);
+    }
+
+    fclose(fp);
+    fclose(temp);
+
+    printf("File encrypted successfully.\n");
+}
+
+void decryptFile()
+{
+    FILE *fp = fopen("encrypted.txt", "r");
+    FILE *temp = fopen("decrypted.txt", "w");
+
+    char ch;
+
+    if(fp == NULL)
+    {
+        printf("Encrypted file not found.\n");
+        return;
+    }
+
+    while((ch = fgetc(fp)) != EOF)
+    {
+        fputc(ch - 3, temp);
+    }
+
+    fclose(fp);
+    fclose(temp);
+
+    printf("File decrypted successfully.\n");
+}
+
 int main()
 {
     if(!login())
@@ -151,7 +199,9 @@ int main()
         printf("7. Check Read Permission\n");
         printf("8. Check Write Permission\n");
         printf("9. Check Execute Permission\n");
-        printf("10. Exit\n");
+        printf("10. Encrypt File\n");
+        printf("11. Decrypt File\n");
+        printf("12. Exit\n");
 
         printf("Enter Choice: ");
         scanf("%d",&choice);
@@ -197,11 +247,23 @@ int main()
             case 9:
                 checkExecutePermission();
                 break;
+
+            case 10:
+                encryptFile();
+                break;
+
+            case 11:
+                decryptFile();
+                break;
+
+            case 12:
+                printf("Program Ended.\n");
+                break;
             default:
                 printf("Invalid Choice.\n");
         }
 
-    }while(choice!=10);
+    }while(choice!=12);
 
     return 0;
 }
