@@ -5,6 +5,21 @@
 
 char permission[4] = "rw-";
 
+void writeLog(char action[])
+{
+    FILE *log = fopen("audit.log", "a");
+
+    if(log == NULL)
+    {
+        printf("Unable to create log file.\n");
+        return;
+    }
+
+    fprintf(log, "%s\n", action);
+
+    fclose(log);
+}
+
 void createFile()
 {
     FILE *fp = fopen("sample.txt", "w");
@@ -17,6 +32,7 @@ void createFile()
 
     printf("File created successfully.\n");
 
+    writeLog("File Created");
     fclose(fp);
 }
 
@@ -36,6 +52,8 @@ void writeFile()
     fclose(fp);
 
     printf("Data written successfully.\n");
+
+    writeLog("File Written");
 }
 
 void readFile()
@@ -57,15 +75,22 @@ void readFile()
         printf("%c",ch);
     }
 
+    writeLog("File Read");
+
     fclose(fp);
 }
 
 void deleteFile()
 {
     if(remove("sample.txt")==0)
+    {
         printf("File deleted successfully.\n");
+        writeLog("File Deleted");
+    }
     else
+    {
         printf("Unable to delete file.\n");
+    }
 }
 
 int login()
@@ -154,6 +179,8 @@ void encryptFile()
     fclose(temp);
 
     printf("File encrypted successfully.\n");
+
+    writeLog("File Encrypted");
 }
 
 void decryptFile()
@@ -173,11 +200,37 @@ void decryptFile()
     {
         fputc(ch - 3, temp);
     }
+    
 
     fclose(fp);
     fclose(temp);
 
     printf("File decrypted successfully.\n");
+
+    writeLog("File Decrypted");
+}
+
+
+void viewLog()
+{
+    FILE *log = fopen("audit.log","r");
+
+    char ch;
+
+    if(log==NULL)
+    {
+        printf("No audit log found.\n");
+        return;
+    }
+
+    printf("\n===== Audit Log =====\n\n");
+
+    while((ch=fgetc(log))!=EOF)
+    {
+        printf("%c",ch);
+    }
+
+    fclose(log);
 }
 
 int main()
@@ -201,7 +254,8 @@ int main()
         printf("9. Check Execute Permission\n");
         printf("10. Encrypt File\n");
         printf("11. Decrypt File\n");
-        printf("12. Exit\n");
+        printf("12. View Audit Log\n");
+        printf("13. Exit\n");
 
         printf("Enter Choice: ");
         scanf("%d",&choice);
@@ -257,13 +311,18 @@ int main()
                 break;
 
             case 12:
+    		viewLog();
+    		break;
+
+            case 13:
                 printf("Program Ended.\n");
                 break;
+
             default:
                 printf("Invalid Choice.\n");
         }
 
-    }while(choice!=12);
+    }while(choice!=13);
 
     return 0;
 }
