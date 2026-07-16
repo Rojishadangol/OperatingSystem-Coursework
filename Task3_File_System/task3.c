@@ -82,15 +82,27 @@ void readFile()
 
 void deleteFile()
 {
-    if(remove("sample.txt")==0)
+    char choice;
+
+    printf("Are you sure you want to delete the file? (y/n): ");
+    scanf(" %c", &choice);
+
+    if(choice == 'y' || choice == 'Y')
     {
-        printf("File deleted successfully.\n");
-        writeLog("File Deleted");
+        if(remove("sample.txt") == 0)
+        {
+            printf("File deleted successfully.\n");
+            writeLog("File Deleted");
+        }
+        else
+        {
+            printf("Unable to delete file.\n");
+        }
     }
     else
     {
-        printf("Unable to delete file.\n");
-    }
+        printf("File deletion cancelled.\n");
+   }
 }
 
 int login()
@@ -98,20 +110,27 @@ int login()
     char username[20];
     char password[20];
 
-    printf("Username: ");
-    scanf("%s",username);
-
-    printf("Password: ");
-    scanf("%s",password);
-
-    if(strcmp(username,"admin")==0 &&
-       strcmp(password,"1234")==0)
+    for(int i = 1; i <= 3; i++)
     {
-        printf("\nLogin Successful.\n");
-        return 1;
+        printf("\nLogin Attempt %d\n", i);
+
+        printf("Username: ");
+        scanf("%s", username);
+
+        printf("Password: ");
+        scanf("%s", password);
+
+        if(strcmp(username, "admin") == 0 &&
+           strcmp(password, "1234") == 0)
+        {
+            printf("\nLogin Successful.\n");
+            return 1;
+        }
+
+        printf("Invalid Username or Password.\n");
     }
 
-    printf("\nInvalid Username or Password.\n");
+    printf("\nMaximum login attempts exceeded.\n");
 
     return 0;
 }
@@ -239,10 +258,12 @@ int main()
     {
         return 0;
     }
+
+    printf("\nWelcome to the Secure File Management System\n");
     int choice;
     do
     {
-        printf("\n===== File System =====\n");
+        printf("\nSeccure File Management System \n");
         printf("1. Create File\n");
         printf("2. Write File\n");
         printf("3. Read File\n");
