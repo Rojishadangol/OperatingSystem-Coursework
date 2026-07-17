@@ -3,6 +3,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #define PORT 8080
 
@@ -31,29 +33,46 @@ int main()
 
     listen(serverSocket, 5);
 
-    printf("Server is waiting for connection...\n");
+    printf("Server is waiting for clients...\n");
 
-    clientSocket = accept(serverSocket, NULL, NULL);
-
-    printf("Client Connected.\n");
-
-    int bytes = read(clientSocket,
-                 message,
-                 sizeof(message)-1);
-
-    if(bytes > 0)
+    while(1)
     {
-        message[bytes] = '\0';
+        clientSocket = accept(serverSocket, NULL, NULL);
 
-        printf("Client Message: %s\n", message);
-    }
-    else
-    {
-        printf("No data received.\n");
-    }
+        if(clientSocket < 0)
+        {
+            printf("Connection Failed.\n");
+            continue;
+        }
 
-    close(clientSocket);
-    close(serverSocket);
+        pid_t pid = fork();
+
+        if(pid == 0)
+        {
+            printf("\nClient Connected.\n");
+
+            int bytes = read(clientSocket,
+                             message,
+                             sizeof(message)-1);
+
+            if(bytes > 0)
+            {
+                message[bytes] = '\0';
+
+                printf("Client Message: %s\n", message);
+            }
+            else
+            {
+                printf("No data received.\n");
+            }
+
+            close(clientSocket);
+
+            exit(0);
+        }
+
+        close(clientSocket);
+    }
 
     return 0;
 }
