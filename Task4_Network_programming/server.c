@@ -37,9 +37,20 @@ int main()
 
     printf("Client Connected.\n");
 
-    read(clientSocket, message, sizeof(message));
+    int bytes = read(clientSocket,
+                 message,
+                 sizeof(message)-1);
 
-    printf("Client: %s\n", message);
+    if(bytes > 0)
+    {
+        message[bytes] = '\0';
+
+        printf("Client Message: %s\n", message);
+    }
+    else
+    {
+        printf("No data received.\n");
+    }
 
     close(clientSocket);
     close(serverSocket);

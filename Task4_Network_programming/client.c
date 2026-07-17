@@ -11,6 +11,8 @@ int main()
     int clientSocket;
     struct sockaddr_in serverAddr;
 
+    char username[20];
+    char password[20];
     char message[100];
 
     clientSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -35,12 +37,39 @@ int main()
 
     printf("Connected to Server.\n");
 
+    printf("Username: ");
+    scanf("%s", username);
+
+    printf("Password: ");
+    scanf("%s", password);
+
+    getchar();
+
+    if(strcmp(username,"admin") != 0 ||
+       strcmp(password,"1234") != 0)
+    {
+        printf("Authentication Failed.\n");
+
+        close(clientSocket);
+        return 0;
+    }
+
+    printf("Authentication Successful.\n");
+
     printf("Enter Message: ");
-    fgets(message, sizeof(message), stdin);
+    fgets(message,sizeof(message),stdin);
 
-    write(clientSocket, message, strlen(message));
+    if(strlen(message) <= 1)
+    {
+        printf("Message cannot be empty.\n");
 
-    printf("Message Sent.\n");
+        close(clientSocket);
+        return 0;
+    }
+
+    write(clientSocket,message,strlen(message));
+
+    printf("Message Sent Successfully.\n");
 
     close(clientSocket);
 
