@@ -35,7 +35,7 @@ int main()
         return 1;
     }
 
-    printf("Connected to Server.\n");
+    printf("Connected to Server Successfully.\n");
 
     printf("Username: ");
     scanf("%s", username);
@@ -70,6 +70,9 @@ int main()
     write(clientSocket,message,strlen(message));
 
     printf("Message Sent Successfully.\n");
+
+    printf("Closing Connection...\n");
+    printf("Disconnected from Server.\n");
 
     close(clientSocket);
 
