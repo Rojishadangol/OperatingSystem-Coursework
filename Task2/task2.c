@@ -14,7 +14,7 @@ void paging()
     int pageSize;
     int logicalAddress;
 
-    printf("\n===== Paging System =====\n");
+    printf("\n Paging System\n");
 
     printf("Enter Page Size: ");
     scanf("%d", &pageSize);
@@ -26,8 +26,8 @@ void paging()
     int offset = logicalAddress % pageSize;
 
     printf("\nAddress Translation\n");
-    printf("----------------------------\n");
-    printf("Page Size        : %d\n", pageSize);
+
+    printf("\nPage Size        : %d\n", pageSize);
     printf("Logical Address  : %d\n", logicalAddress);
     printf("Page Number      : %d\n", pageNumber);
     printf("Offset           : %d\n", offset);
@@ -43,7 +43,7 @@ void fifo()
     for(int i=0;i<FRAMES;i++)
         frame[i] = -1;
 
-    printf("\n===== FIFO Page Replacement =====\n");
+    printf("\n FIFO Page Replacement \n");
 
     for(int i=0;i<PAGES;i++)
     {
@@ -69,8 +69,7 @@ void fifo()
             pointer = (pointer + 1) % FRAMES;
         }
 
-        printf("\nRequest Page %d\n", pages[i]);
-        printf("Frames : ");
+        printf("\nPage %d: \n", pages[i]);
 
         for(int j=0;j<FRAMES;j++)
         {
@@ -103,7 +102,7 @@ void lru()
         recent[i] = -1;
     }
 
-    printf("\n===== LRU Page Replacement =====\n");
+    printf("\nLRU Page Replacement \n");
 
     for(int i=0;i<PAGES;i++)
     {
@@ -139,8 +138,7 @@ void lru()
             recent[replace] = i;
         }
 
-        printf("\nRequest Page %d\n", pages[i]);
-        printf("Frames : ");
+        printf("\nPage %d: \n", pages[i]);
 
         for(int j=0;j<FRAMES;j++)
         {
@@ -158,42 +156,19 @@ void lru()
     printf("Miss Ratio  : %.2f\n",(float)fault/PAGES);
 }
 
-void compareAlgorithms()
-{
-    printf("\n===== Algorithm Comparison =====\n");
-
-    printf("\nFIFO\n");
-    printf("Page Faults : 6\n");
-    printf("Hits        : 1\n");
-    printf("Hit Ratio   : 0.14\n");
-    printf("Miss Ratio  : 0.86\n");
-
-    printf("\nLRU\n");
-    printf("Page Faults : 6\n");
-    printf("Hits        : 1\n");
-    printf("Hit Ratio   : 0.14\n");
-    printf("Miss Ratio  : 0.86\n");
-
-    printf("\nObservation:\n");
-    printf("For this page reference string,\n");
-    printf("FIFO and LRU produced the same result.\n");
-}
-
-
 int main()
 {
     int choice;
 
     do
     {
-        printf("\n=================================\n");
+        
         printf("   MEMORY MANAGEMENT SIMULATOR\n");
-        printf("=================================\n");
+        
         printf("1. Paging System\n");
         printf("2. FIFO Page Replacement\n");
         printf("3. LRU Page Replacement\n");
-        printf("4. Compare FIFO and LRU\n");
-        printf("5. Exit\n");
+        printf("4. Exit\n");
         printf("Enter your choice: ");
         scanf("%d",&choice);
 
@@ -212,10 +187,6 @@ int main()
                 break;
 
            case 4:
-                compareAlgorithms();
-                break;
-
-           case 5:
                 printf("\nProgram Ended.\n");
                 break;
 
