@@ -1,9 +1,10 @@
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
-char permission[4] = "rw-";
+char samplePermission[4] = "rw-";
+char readOnlyPermission[4] = "r--";
+
 
 void writeLog(char action[])
 {
@@ -23,17 +24,28 @@ void writeLog(char action[])
 void createFile()
 {
     FILE *fp = fopen("sample.txt", "w");
+    FILE *fp2 = fopen("reaaonly.txt", "w");
 
-    if(fp == NULL)
+    if(fp == NULL || fp2 == NULL)
     {
         printf("File could not be created.\n");
         return;
     }
 
+    fprintf(fp, "Operating Systems Coursework\n");
+    fprintf(fp, "Owner: Admin\n");
+    fprintf(fp, "Permission: Read and Write\n");
+
+    fprintf(fp2, "Operating Systems Coursework\n");
+    fprintf(fp2, "This file is Read Only.\n");
+    fprintf(fp2, "Permission: Read Only\n");
+
+    fclose(fp);
+    fclose(fp2);
+
     printf("File created successfully.\n");
 
     writeLog("File Created");
-    fclose(fp);
 }
 
 void writeFile()
@@ -82,27 +94,16 @@ void readFile()
 
 void deleteFile()
 {
-    char choice;
-
-    printf("Are you sure you want to delete the file? (y/n): ");
-    scanf(" %c", &choice);
-
-    if(choice == 'y' || choice == 'Y')
+    if(remove("sample.txt") == 0)
     {
-        if(remove("sample.txt") == 0)
-        {
-            printf("File deleted successfully.\n");
-            writeLog("File Deleted");
-        }
-        else
-        {
-            printf("Unable to delete file.\n");
-        }
+        printf("File deleted successfully.\n");
+        writeLog("File Deleted");
     }
     else
     {
-        printf("File deletion cancelled.\n");
-   }
+        printf("Unable to delete file.\n");
+    }
+    
 }
 
 int login()
@@ -110,25 +111,20 @@ int login()
     char username[20];
     char password[20];
 
-    for(int i = 1; i <= 3; i++)
+    printf("Username: ");
+    scanf("%s", username);
+
+    printf("Password: ");
+    scanf("%s", password);
+
+    if(strcmp(username, "admin") == 0 &&
+       strcmp(password, "1234") == 0)
     {
-        printf("\nLogin Attempt %d\n", i);
-
-        printf("Username: ");
-        scanf("%s", username);
-
-        printf("Password: ");
-        scanf("%s", password);
-
-        if(strcmp(username, "admin") == 0 &&
-           strcmp(password, "1234") == 0)
-        {
-            printf("\nLogin Successful.\n");
-            return 1;
-        }
-
-        printf("Invalid Username or Password.\n");
+        printf("\nLogin Successful.\n");
+        return 1;
     }
+
+    printf("Invalid Username or Password.\n");
 
     printf("\nMaximum login attempts exceeded.\n");
 
@@ -137,22 +133,62 @@ int login()
 
 void showPermission()
 {
-    printf("\nCurrent File Permission: %s\n", permission);
+    int file;
+
+    printf("\n1. sample.txt\n");
+    printf("2. readonly.txt\n");
+    printf("Choose File: ");
+    scanf("%d", &file);
+
+    if(file == 1)
+        printf("sample.txt Permission : %s\n", samplePermission);
+    else if(file == 2)
+        printf("readonly.txt Permission : %s\n", readOnlyPermission);
+    else
+        printf("Invalid Choice.\n");
 }
 
+void changePermission(){
+    printf("\nEnter new permission (eg: rwx, rw-, r--): ");
+    int file;
 
-void changePermission()
-{
-    printf("\nEnter new permission (example rwx, rw-, r--): ");
-    scanf("%s", permission);
+    printf("\n1. sample.txt\n");
+    printf("2. readonly.txt\n");
+    printf("Choose File: ");
+    scanf("%d", &file);
 
+    if(file == 1)
+    {
+    	printf("Enter Permission: ");
+    	scanf("%s", samplePermission);
+    }
+    else if(file == 2)
+    {
+    	printf("Enter Permission: ");
+    	scanf("%s", readOnlyPermission);
+    }
+    else
+    {
+    	printf("Invalid Choice.\n");
+    }
     printf("Permission changed successfully.\n");
 }
-
-
 void checkReadPermission()
 {
-    if(permission[0]=='r')
+    int file;
+    char *p;
+
+    printf("\n1. sample.txt\n");
+    printf("2. readonly.txt\n");
+    printf("Choose File: ");
+    scanf("%d",&file);
+
+    if(file == 1)
+        p = samplePermission;
+    else
+        p = readOnlyPermission;
+
+    if(p[0] == 'r')
         printf("Read Permission Granted.\n");
     else
         printf("Read Permission Denied.\n");
@@ -161,7 +197,20 @@ void checkReadPermission()
 
 void checkWritePermission()
 {
-    if(permission[1]=='w')
+    int file;
+char *p;
+
+    printf("\n1. sample.txt\n");
+    printf("2. readonly.txt\n");
+    printf("Choose File: ");
+    scanf("%d",&file);
+
+    if(file == 1)
+        p = samplePermission;
+    else
+        p = readOnlyPermission;
+
+    if(p[1] == 'w')
         printf("Write Permission Granted.\n");
     else
         printf("Write Permission Denied.\n");
@@ -170,8 +219,22 @@ void checkWritePermission()
 
 void checkExecutePermission()
 {
-    if(permission[2]=='x')
+    int file;
+    char *p;
+
+    printf("\n1. sample.txt\n");
+    printf("2. readonly.txt\n");
+    printf("Choose File: ");
+    scanf("%d",&file);
+
+    if(file == 1)
+        p = samplePermission;
+    else
+        p = readOnlyPermission;
+
+    if(p[2] == 'x')
         printf("Execute Permission Granted.\n");
+
     else
         printf("Execute Permission Denied.\n");
 }
