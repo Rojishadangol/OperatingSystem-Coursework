@@ -83,6 +83,7 @@ int main()
 
             exit(0);
         }
+    printf("Session Completed");
 
         close(clientSocket);
     }

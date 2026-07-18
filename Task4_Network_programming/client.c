@@ -37,6 +37,7 @@ int main()
 
     printf("Connected to Server Successfully.\n");
 
+    printf("Client Appllication..\n");
     printf("Username: ");
     scanf("%s", username);
 
@@ -75,6 +76,6 @@ int main()
     printf("Disconnected from Server.\n");
 
     close(clientSocket);
-
+    printf("\n Thank you...\n");
     return 0;
 }
