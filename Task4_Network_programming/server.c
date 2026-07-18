@@ -27,13 +27,24 @@ int main()
     serverAddr.sin_port = htons(PORT);
     serverAddr.sin_addr.s_addr = INADDR_ANY;
 
-    bind(serverSocket,
-         (struct sockaddr*)&serverAddr,
-         sizeof(serverAddr));
+    if(bind(serverSocket,
+           (struct sockaddr*)&serverAddr,
+           sizeof(serverAddr)) < 0)
+    {
+        printf("Bind Failed.\n");
+        close(serverSocket);
+        return 1;
+    }
 
-    listen(serverSocket, 5);
+    if(listen(serverSocket,5) < 0)
+    {
+        printf("Listen Failed.\n");
+        close(serverSocket);
+        return 1;
+    }
 
-    printf("Server is waiting for clients...\n");
+    printf("TCP Server Started.\n");
+    printf("Waiting for client...\n");
 
     while(1)
     {
@@ -63,8 +74,10 @@ int main()
             }
             else
             {
-                printf("No data received.\n");
+                printf("Cleint disconnected without sending data.\n");
             }
+
+            printf("Connection Closed.\n");
 
             close(clientSocket);
 
