@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <string.h>
 
@@ -117,8 +116,8 @@ int login()
     printf("Password: ");
     scanf("%s", password);
 
-    if(strcmp(username, "admin") == 0 &&
-       strcmp(password, "1234") == 0)
+    if(strcmp(username, "rojisha") == 0 &&
+       strcmp(password, "12345") == 0)
     {
         printf("\nLogin Successful.\n");
         return 1;
