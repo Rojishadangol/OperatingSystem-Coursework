@@ -1,75 +1,69 @@
+/*
+    Task 3
+    Banking Management System
+    Secure File Management
+*/
+
 #include <stdio.h>
 #include <string.h>
 
-char samplePermission[4] = "rw-";
-char readOnlyPermission[4] = "r--";
+char permission[]="rw-";
 
-
-void writeLog(char action[])
+void logActivity(char action[])
 {
-    FILE *log = fopen("audit.log", "a");
+    FILE *fp=fopen("audit.log","a");
 
-    if(log == NULL)
+    if(fp!=NULL)
     {
-        printf("Unable to create log file.\n");
-        return;
+        fprintf(fp,"%s\n",action);
+        fclose(fp);
+    }
+}
+
+int login()
+{
+    char user[20],pass[20];
+
+    printf("\n Bank Login \n");
+
+    printf("Username : ");
+    scanf("%s",user);
+
+    printf("Password : ");
+    scanf("%s",pass);
+
+    if(strcmp(user,"rojisha")==0 &&
+       strcmp(pass,"12345")==0)
+    {
+        printf("\nLogin Successful.\n");
+        return 1;
     }
 
-    fprintf(log, "%s\n", action);
-
-    fclose(log);
+    printf("\nInvalid Login.\n");
+    return 0;
 }
 
 void createFile()
 {
-    FILE *fp = fopen("sample.txt", "w");
-    FILE *fp2 = fopen("reaaonly.txt", "w");
+    FILE *fp=fopen("customer_accounts.txt","w");
 
-    if(fp == NULL || fp2 == NULL)
-    {
-        printf("File could not be created.\n");
+    if(fp==NULL)
         return;
-    }
 
-    fprintf(fp, "Operating Systems Coursework\n");
-    fprintf(fp, "Owner: Admin\n");
-    fprintf(fp, "Permission: Read and Write\n");
-
-    fprintf(fp2, "Operating Systems Coursework\n");
-    fprintf(fp2, "This file is Read Only.\n");
-    fprintf(fp2, "Permission: Read Only\n");
-
-    fclose(fp);
-    fclose(fp2);
-
-    printf("File created successfully.\n");
-
-    writeLog("File Created");
-}
-
-void writeFile()
-{
-    FILE *fp = fopen("sample.txt", "w");
-
-    if(fp == NULL)
-    {
-        printf("Unable to open file.\n");
-        return;
-    }
-
-    fprintf(fp,"Operating Systems Coursework\n");
-    fprintf(fp,"Task 3 File System\n");
+    fprintf(fp,"Customer Name : Ram Sharma\n");
+    fprintf(fp,"Account No    : 10001\n");
+    fprintf(fp,"Balance       : Rs.50000\n");
 
     fclose(fp);
 
-    printf("Data written successfully.\n");
+    printf("Customer file created.\n");
 
-    writeLog("File Written");
+    logActivity("Customer File Created");
 }
 
 void readFile()
 {
-    FILE *fp = fopen("sample.txt","r");
+    FILE *fp=fopen("customer_accounts.txt","r");
 
     char ch;
 
@@ -79,333 +73,206 @@ void readFile()
         return;
     }
 
-    printf("\nFile Content:\n\n");
-
     while((ch=fgetc(fp))!=EOF)
-    {
         printf("%c",ch);
-    }
-
-    writeLog("File Read");
 
     fclose(fp);
+
+    logActivity("Customer File Read");
+}
+
+void writeFile()
+{
+    FILE *fp=fopen("customer_accounts.txt","a");
+
+    if(fp==NULL)
+        return;
+
+    fprintf(fp,"\nLast Transaction : Deposit Rs.5000\n");
+
+    fclose(fp);
+
+    printf("Transaction saved.\n");
+
+    logActivity("Customer File Updated");
 }
 
 void deleteFile()
 {
-    if(remove("sample.txt") == 0)
-    {
-        printf("File deleted successfully.\n");
-        writeLog("File Deleted");
-    }
-    else
-    {
-        printf("Unable to delete file.\n");
-    }
-    
-}
+    remove("customer_accounts.txt");
 
-int login()
-{
-    char username[20];
-    char password[20];
+    printf("Customer file deleted.\n");
 
-    printf("Username: ");
-    scanf("%s", username);
-
-    printf("Password: ");
-    scanf("%s", password);
-
-    if(strcmp(username, "rojisha") == 0 &&
-       strcmp(password, "12345") == 0)
-    {
-        printf("\nLogin Successful.\n");
-        return 1;
-    }
-
-    printf("Invalid Username or Password.\n");
-
-    printf("\nMaximum login attempts exceeded.\n");
-
-    return 0;
+    logActivity("Customer File Deleted");
 }
 
 void showPermission()
 {
-    int file;
-
-    printf("\n1. sample.txt\n");
-    printf("2. readonly.txt\n");
-    printf("Choose File: ");
-    scanf("%d", &file);
-
-    if(file == 1)
-        printf("sample.txt Permission : %s\n", samplePermission);
-    else if(file == 2)
-        printf("readonly.txt Permission : %s\n", readOnlyPermission);
-    else
-        printf("Invalid Choice.\n");
+    printf("Current Permission : %s\n",permission);
 }
 
-void changePermission(){
-    printf("\nEnter new permission (eg: rwx, rw-, r--): ");
-    int file;
-
-    printf("\n1. sample.txt\n");
-    printf("2. readonly.txt\n");
-    printf("Choose File: ");
-    scanf("%d", &file);
-
-    if(file == 1)
-    {
-    	printf("Enter Permission: ");
-    	scanf("%s", samplePermission);
-    }
-    else if(file == 2)
-    {
-    	printf("Enter Permission: ");
-    	scanf("%s", readOnlyPermission);
-    }
-    else
-    {
-    	printf("Invalid Choice.\n");
-    }
-    printf("Permission changed successfully.\n");
-}
-void checkReadPermission()
+void changePermission()
 {
-    int file;
-    char *p;
-
-    printf("\n1. sample.txt\n");
-    printf("2. readonly.txt\n");
-    printf("Choose File: ");
-    scanf("%d",&file);
-
-    if(file == 1)
-        p = samplePermission;
-    else
-        p = readOnlyPermission;
-
-    if(p[0] == 'r')
-        printf("Read Permission Granted.\n");
-    else
-        printf("Read Permission Denied.\n");
-}
-
-
-void checkWritePermission()
-{
-    int file;
-char *p;
-
-    printf("\n1. sample.txt\n");
-    printf("2. readonly.txt\n");
-    printf("Choose File: ");
-    scanf("%d",&file);
-
-    if(file == 1)
-        p = samplePermission;
-    else
-        p = readOnlyPermission;
-
-    if(p[1] == 'w')
-        printf("Write Permission Granted.\n");
-    else
-        printf("Write Permission Denied.\n");
-}
-
-
-void checkExecutePermission()
-{
-    int file;
-    char *p;
-
-    printf("\n1. sample.txt\n");
-    printf("2. readonly.txt\n");
-    printf("Choose File: ");
-    scanf("%d",&file);
-
-    if(file == 1)
-        p = samplePermission;
-    else
-        p = readOnlyPermission;
-
-    if(p[2] == 'x')
-        printf("Execute Permission Granted.\n");
-
-    else
-        printf("Execute Permission Denied.\n");
+    printf("Enter Permission : ");
+    scanf("%s",permission);
 }
 
 void encryptFile()
 {
-    FILE *fp = fopen("sample.txt", "r");
-    FILE *temp = fopen("encrypted.txt", "w");
+    FILE *in = fopen("customer_accounts.txt","r");
 
-    char ch;
-
-    if(fp == NULL)
+    if(in == NULL)
     {
-        printf("File not found.\n");
+        printf("Customer file not found.\n");
         return;
     }
 
-    while((ch = fgetc(fp)) != EOF)
+    FILE *out = fopen("encrypted.txt","w");
+
+    char ch;
+
+    while((ch = fgetc(in)) != EOF)
     {
-        fputc(ch + 3, temp);
+        fputc(ch + 3, out);
     }
 
-    fclose(fp);
-    fclose(temp);
+    fclose(in);
+    fclose(out);
 
-    printf("File encrypted successfully.\n");
+    printf("Customer file encrypted successfully.\n");
 
-    writeLog("File Encrypted");
+    logActivity("Customer File Encrypted");
 }
 
 void decryptFile()
 {
-    FILE *fp = fopen("encrypted.txt", "r");
-    FILE *temp = fopen("decrypted.txt", "w");
+    FILE *in = fopen("encrypted.txt","r");
 
-    char ch;
-
-    if(fp == NULL)
+    if(in == NULL)
     {
         printf("Encrypted file not found.\n");
         return;
     }
 
-    while((ch = fgetc(fp)) != EOF)
-    {
-        fputc(ch - 3, temp);
-    }
-    
-
-    fclose(fp);
-    fclose(temp);
-
-    printf("File decrypted successfully.\n");
-
-    writeLog("File Decrypted");
-}
-
-
-void viewLog()
-{
-    FILE *log = fopen("audit.log","r");
+    FILE *out = fopen("decrypted.txt","w");
 
     char ch;
 
-    if(log==NULL)
+    while((ch = fgetc(in)) != EOF)
     {
-        printf("No audit log found.\n");
+        fputc(ch - 3, out);
+    }
+
+    fclose(in);
+    fclose(out);
+
+    printf("Customer file decrypted successfully.\n");
+
+    logActivity("Customer File Decrypted");
+}
+
+void readPolicy()
+{
+    FILE *fp = fopen("bank_policy.txt","r");
+
+    if(fp == NULL)
+    {
+        printf("Policy file not found.\n");
         return;
     }
 
-    printf("\n===== Audit Log =====\n\n");
+    char ch;
 
-    while((ch=fgetc(log))!=EOF)
-    {
+    printf("\n Bank Policy \n");
+
+    while((ch=fgetc(fp))!=EOF)
         printf("%c",ch);
-    }
 
-    fclose(log);
+    fclose(fp);
+}
+void viewLog()
+{
+    FILE *fp=fopen("audit.log","r");
+
+    char ch;
+
+    if(fp==NULL)
+        return;
+
+    printf("\n Audit Log \n");
+
+    while((ch=fgetc(fp))!=EOF)
+        printf("%c",ch);
+
+    fclose(fp);
 }
 
 int main()
 {
-    if(!login())
-    {
-        return 0;
-    }
-
-    printf("\nWelcome to the Secure File Management System\n");
     int choice;
+
+    if(!login())
+        return 0;
+
     do
     {
-        printf("\nSeccure File Management System \n");
-        printf("1. Create File\n");
-        printf("2. Write File\n");
-        printf("3. Read File\n");
-        printf("4. Delete File\n");
-        printf("5. Show File Permission\n");
-        printf("6. Change File Permission\n");
-        printf("7. Check Read Permission\n");
-        printf("8. Check Write Permission\n");
-        printf("9. Check Execute Permission\n");
-        printf("10. Encrypt File\n");
-        printf("11. Decrypt File\n");
-        printf("12. View Audit Log\n");
-        printf("13. Exit\n");
+        
+        printf(" Secure Banking File System\n");
+      
+        printf("1.Create Customer File\n");
+        printf("2.Update Customer File\n");
+        printf("3.Read Customer File\n");
+        printf("4.Delete Customer File\n");
+        printf("5.Show Permission\n");
+        printf("6.Change Permission\n");
+        printf("7.Encrypt File\n");
+        printf("8.Decrypt File\n");
+        printf("9.View Audit Log\n");
+        printf("10.Read Bank Policy\n");
+        printf("11.Exit\n");
 
-        printf("Enter Choice: ");
+        printf("Choice : ");
         scanf("%d",&choice);
 
         switch(choice)
         {
             case 1:
-                createFile();
-                break;
-
+		createFile();
+		break;
             case 2:
-                writeFile();
-                break;
-
+		writeFile();
+		break;
             case 3:
-                readFile();
-                break;
-
+		readFile();
+		break;
             case 4:
-                deleteFile();
-                break;
-
-             case 5:
-                showPermission();
-                break;
-
-
+		deleteFile();
+		break;
+            case 5:
+		showPermission();
+		break;
             case 6:
-                changePermission();
-                break;
-
-
+		changePermission();
+		break;
             case 7:
-                checkReadPermission();
-                break;
-
-
+		encryptFile();
+		break;
             case 8:
-                checkWritePermission();
-                break;
-
-
+		decryptFile();
+		break;
             case 9:
-                checkExecutePermission();
-                break;
-
-            case 10:
-                encryptFile();
-                break;
-
-            case 11:
-                decryptFile();
-                break;
-
-            case 12:
-    		viewLog();
+		viewLog();	
+		break;
+	    case 10:
+    		readPolicy();
     		break;
-
-            case 13:
-                printf("Program Ended.\n");
-                break;
-
-            default:
-                printf("Invalid Choice.\n");
+            case 11:
+		printf("Program Ended.\n");
+		break;
+            default:printf("Invalid Choice.\n");
         }
 
-    }while(choice!=13);
+    }while(choice!=11);
 
     return 0;
 }

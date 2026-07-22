@@ -1,0 +1,6 @@
+    	ABC Bank Security Policy
+
+1. Customer information is confidential.
+2. Only authorized staff may modify account details.
+3. Unauthorized access is prohibited.
+4. Every activity is recorded in the audit log.

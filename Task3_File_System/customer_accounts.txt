@@ -1,0 +1,3 @@
+Customer Name : Ram Sharma
+Account No    : 10001
+Balance       : Rs.50000
