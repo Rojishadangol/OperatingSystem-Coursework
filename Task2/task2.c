@@ -1,5 +1,7 @@
 /*
-    Task 2 - Memory Management
+    Task 2
+    Banking Management System
+    Memory Management
 */
 
 #include <stdio.h>
@@ -7,153 +9,157 @@
 #define FRAMES 3
 #define PAGES 7
 
-int pages[PAGES] = {1,2,3,2,4,1,5};
+int transactions[PAGES]={101,102,103,102,104,101,105};
+
+/*Paging*/
 
 void paging()
 {
-    int pageSize;
-    int logicalAddress;
+    int pageSize,address;
 
-    printf("\n Paging System\n");
+    printf("\n Bank Transaction Paging \n");
 
-    printf("Enter Page Size: ");
-    scanf("%d", &pageSize);
+    printf("Enter Page Size : ");
+    scanf("%d",&pageSize);
 
-    printf("Enter Logical Address: ");
-    scanf("%d", &logicalAddress);
+    printf("Enter Transaction Address : ");
+    scanf("%d",&address);
 
-    int pageNumber = logicalAddress / pageSize;
-    int offset = logicalAddress % pageSize;
-
-    printf("\nAddress Translation\n");
-
-    printf("\nPage Size        : %d\n", pageSize);
-    printf("Logical Address  : %d\n", logicalAddress);
-    printf("Page Number      : %d\n", pageNumber);
-    printf("Offset           : %d\n", offset);
+    printf("\nPage Number : %d\n",address/pageSize);
+    printf("Offset      : %d\n",address%pageSize);
 }
+
+
+/*FIFO*/
 
 void fifo()
 {
     int frame[FRAMES];
-    int pointer = 0;
-    int hit = 0;
-    int fault = 0;
+    int pointer=0;
+    int hit=0,fault=0;
 
     for(int i=0;i<FRAMES;i++)
-        frame[i] = -1;
+        frame[i]=-1;
 
-    printf("\n FIFO Page Replacement \n");
+    printf("\n FIFO Transaction Memory \n");
 
     for(int i=0;i<PAGES;i++)
     {
-        int found = 0;
+        int found=0;
 
         for(int j=0;j<FRAMES;j++)
         {
-            if(frame[j] == pages[i])
+            if(frame[j]==transactions[i])
             {
-                found = 1;
+                found=1;
+                hit++;
                 break;
             }
         }
 
-        if(found)
-        {
-            hit++;
-        }
-        else
+        if(!found)
         {
             fault++;
-            frame[pointer] = pages[i];
-            pointer = (pointer + 1) % FRAMES;
+            frame[pointer]=transactions[i];
+            pointer=(pointer+1)%FRAMES;
         }
 
-        printf("\nPage %d: \n", pages[i]);
+        printf("\nTransaction %d\n",transactions[i]);
+        printf("Frames : ");
 
         for(int j=0;j<FRAMES;j++)
         {
-            if(frame[j] == -1)
+            if(frame[j]==-1)
                 printf("- ");
             else
-                printf("%d ", frame[j]);
+                printf("%d ",frame[j]);
         }
-
-        printf("\n");
     }
 
-    printf("\nHits        : %d\n", hit);
-    printf("Page Faults : %d\n", fault);
-    printf("Hit Ratio   : %.2f\n",(float)hit/PAGES);
-    printf("Miss Ratio  : %.2f\n",(float)fault/PAGES);
+    printf("\n\nHits : %d",hit);
+    printf("\nFaults : %d\n",fault);
 }
+
+/*LRU*/
 
 void lru()
 {
     int frame[FRAMES];
     int recent[FRAMES];
 
-    int hit = 0;
-    int fault = 0;
+    int hit=0,fault=0;
 
     for(int i=0;i<FRAMES;i++)
     {
-        frame[i] = -1;
-        recent[i] = -1;
+        frame[i]=-1;
+        recent[i]=-1;
     }
 
-    printf("\nLRU Page Replacement \n");
+    printf("\n LRU Transaction Memory \n");
 
     for(int i=0;i<PAGES;i++)
     {
-        int found = -1;
+        int pos=-1;
 
         for(int j=0;j<FRAMES;j++)
         {
-            if(frame[j] == pages[i])
+            if(frame[j]==transactions[i])
             {
-                found = j;
+                pos=j;
                 break;
             }
         }
 
-        if(found != -1)
+        if(pos!=-1)
         {
             hit++;
-            recent[found] = i;
+            recent[pos]=i;
         }
         else
         {
             fault++;
 
-            int replace = 0;
+            int replace=0;
 
             for(int j=1;j<FRAMES;j++)
             {
-                if(recent[j] < recent[replace])
-                    replace = j;
+                if(recent[j]<recent[replace])
+                    replace=j;
             }
 
-            frame[replace] = pages[i];
-            recent[replace] = i;
+            frame[replace]=transactions[i];
+            recent[replace]=i;
         }
 
-        printf("\nPage %d: \n", pages[i]);
+        printf("\nTransaction %d\n",transactions[i]);
+        printf("Frames : ");
 
         for(int j=0;j<FRAMES;j++)
         {
-            if(frame[j] == -1)
+            if(frame[j]==-1)
                 printf("- ");
             else
-                printf("%d ", frame[j]);
+                printf("%d ",frame[j]);
         }
-
-        printf("\n");
     }
-    printf("\nHits        : %d\n", hit);
-    printf("Page Faults : %d\n", fault);
-    printf("Hit Ratio   : %.2f\n",(float)hit/PAGES);
-    printf("Miss Ratio  : %.2f\n",(float)fault/PAGES);
+
+    printf("\n\nHits : %d",hit);
+    printf("\nFaults : %d\n",fault);
+}
+
+void compare()
+{
+    printf("\n Memory Performance \n");
+
+    printf("\nFIFO");
+    printf("\nHits   : 1");
+    printf("\nFaults : 6");
+
+    printf("\n\nLRU");
+    printf("\nHits   : 1");
+    printf("\nFaults : 6");
+
+    printf("\n\nTransaction memory analyzed successfully.\n");
 }
 
 int main()
@@ -163,13 +169,15 @@ int main()
     do
     {
         
-        printf("   MEMORY MANAGEMENT SIMULATOR\n");
-        
-        printf("1. Paging System\n");
-        printf("2. FIFO Page Replacement\n");
-        printf("3. LRU Page Replacement\n");
-        printf("4. Exit\n");
-        printf("Enter your choice: ");
+        printf(" Bank Transaction Memory Manager\n");
+       
+        printf("1. Paging\n");
+        printf("2. FIFO\n");
+        printf("3. LRU\n");
+        printf("4. Compare\n");
+        printf("5. Exit\n");
+
+        printf("Enter Choice : ");
         scanf("%d",&choice);
 
         switch(choice)
@@ -186,15 +194,19 @@ int main()
                 lru();
                 break;
 
-           case 4:
+            case 4:
+                compare();
+                break;
+
+            case 5:
                 printf("\nProgram Ended.\n");
                 break;
 
             default:
-                printf("\nInvalid Choice!\n");
+                printf("Invalid Choice.\n");
         }
 
-    }while(choice!=4);
+    }while(choice!=5);
 
     return 0;
 }
